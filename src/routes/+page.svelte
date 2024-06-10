@@ -11,7 +11,6 @@
   function sendMessage() {
       if (inputValue.trim() !== '') {
           messages = [...messages, { text: inputValue, isUser: true }];
-          // Here you could send the message to your backend or process it
           inputValue = '';
       }
   }
@@ -42,7 +41,6 @@
   function saveChat() {
       if (messages.length > 0) {
           previousChats[messages[0].text || "Untitled"] = {messages:messages};
-          // Optionally clear current messages after saving
       }
   }
   $:if(imageLink){
@@ -52,7 +50,6 @@
   function handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            // Here you can handle the file upload, for example, send it to a server
             const imageURL = URL.createObjectURL(file);
             messages = [...messages, { image: imageURL, isUser: true }];
         }
@@ -75,9 +72,7 @@
       {/each}
   </div>
 
-  <!-- Main content -->
   <div class="flex flex-col flex-1">
-      <!-- Header with dark mode switch -->
       <div class="p-4 flex justify-between items-center">
         <div class="gap-2 flex justify-evenly items-center">
           <button on:click={toggleSidebar}>
@@ -109,7 +104,6 @@
       </div>
 
 
-      <!-- Messages container -->
       <div class="flex-1 overflow-y-auto  p-4 border-t-2 border-gray-300">
         {#each messages as message}
             <div class="mb-2">
@@ -126,7 +120,6 @@
         {/each}
     </div>
 
-      <!-- Input field for new messages -->
       <div class="p-4 flex flex-col justify-between items-center gap-2">
         <div class=" flex flex-row w-full">
           <div class="relative w-full">

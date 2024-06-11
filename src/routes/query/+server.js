@@ -1,5 +1,5 @@
 export const config = {
-	maxDuration: 500, // 5 seconds
+	maxDuration: 60, // 5 seconds
   };
 import { AI_API } from '$env/static/private';
 /** @type {import('./$types').RequestHandler} */

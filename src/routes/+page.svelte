@@ -9,6 +9,7 @@
 
   let fApp=null
 let user=null
+let image_link
   let messages = [];
   let inputValue = '';
   let darkMode = false;
@@ -20,7 +21,7 @@ let user=null
 	const response = fetch("/query", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ inputC }),
+            body: JSON.stringify({ inputC:inputC,image_link:image_link }),
           })
 	const result = (await response).text()
 	return result;
@@ -31,7 +32,10 @@ let user=null
           messages = [...messages, { text: inputValue, isUser: true }];
           inputValue = '';
       }
+      messages = [...messages, { text: "...", isUser: false }];
+      
       let res=await query(inputC)
+      messages.pop()
       messages = [...messages, { text: res, isUser: false }];
       
       
@@ -63,7 +67,15 @@ let user=null
 
   function saveChat() {
       if (messages.length > 0) {
-          previousChats[messages[0].text || "Untitled"] = {messages:messages};
+        let title=messages[0].text
+        let i=0
+        while(!title && i<messages.length){
+          i+=1
+          title=messages[i].text
+          
+        }
+        previousChats[title] = {messages:messages};
+
       }
       fApp=initializeApp(firebaseConfig,{experimentalForceLongPolling: true, // this line
             useFetchStreams: false});
@@ -73,13 +85,9 @@ let user=null
 setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
 
   }
-  $:if(imageLink){
-    query({inputs:imageLink}).then((res)=>{
-      res=res[0].generated_text
-      messages = [...messages, { text: res, isUser: false }];
-    })
-    
-    messages = [...messages, { image: imageLink, isUser: true }];
+  $:if(imageLink){  
+    image_link=imageLink
+    messages = [...messages, { image: image_link, isUser: true }];
 
     imageLink=null
   }

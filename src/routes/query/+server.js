@@ -1,5 +1,5 @@
 import { AI_API } from '$env/static/private';
-
+export const maxDuration = 500;
 /** @type {import('./$types').RequestHandler} */
 export async function POST({request}) {
     let {inputC,image_link}=await request.json()

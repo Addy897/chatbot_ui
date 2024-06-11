@@ -15,10 +15,13 @@ export async function POST({request}) {
 			body: JSON.stringify(data),
 		}
 	);
-	
-	let result = await response.json();
-	console.log(result) 
+	let result;
+	try{
+	result = await response.json();
     result=result.response
+	}catch{
+		result="Please Upload Image and ask question"
+	}
 	
     return new Response(result);
 }

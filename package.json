@@ -23,6 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@material-tailwind/html": "^2.2.2"
+		"@material-tailwind/html": "^2.2.2",
+		"firebase": "^10.12.2"
 	}
 }

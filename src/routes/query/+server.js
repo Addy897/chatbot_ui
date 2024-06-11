@@ -13,7 +13,8 @@ export async function POST({request}) {
 		}
 	);
 	
-	let result = await response.json(); 
+	let result = await response.json();
+	console.log(result) 
     result=result.response
 	
     return new Response(result);

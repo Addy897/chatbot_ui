@@ -1,14 +1,32 @@
-/** @type {import('tailwindcss').Config} */
-import withMT from "@material-tailwind/html/utils/withMT";
-export default withMT({
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+const config = {
+  content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
+
+  plugins: [require('flowbite/plugin')],
+
+  darkMode: 'selector',
+
   theme: {
     extend: {
       colors: {
         "dark": "var(--dark-color)",
-        "light": "var(--light-color)"
-      },
+        "light": "var(--light-color)",
+        primary: {
+          50: '#FFF5F2',
+          100: '#FFF1EE',
+          200: '#FFE4DE',
+          300: '#FFD5CC',
+          400: '#FFBCAD',
+          500: '#FE795D',
+          600: '#EF562F',
+          700: '#EB4F27',
+          800: '#CC4522',
+          900: '#A5371B'
+        }
+      }
     }
-  },
-  plugins: []
-});
+  }
+};
+
+module.exports = config;
+       
+      

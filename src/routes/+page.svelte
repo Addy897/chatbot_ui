@@ -85,6 +85,7 @@ let image_link
 setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
 
   }
+  let formModal=false
   $:if(imageLink){  
     image_link=imageLink
     messages = [...messages, { image: image_link, isUser: true }];
@@ -245,10 +246,12 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
           <div class="flex flex-row">
             <button
             class="select-none rounded-lg {darkMode?'bg-white text-black shadow-gray-500/10 hover:shadow-gray-100/20':'bg-gray-900 text-white shadow-gray-900/10 hover:shadow-gray-900/20'}  py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button" data-dialog-target="sign-in-dialog">
+            type="button"
+            on:click={()=>{formModal=true}}
+            >
             Upload Image
             </button>  
-          <GetLink bind:imageLink={imageLink} ></GetLink>
+          <GetLink bind:imageLink={imageLink} bind:formModal={formModal} ></GetLink>
           <button class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg {darkMode?' shadow-gray-500/10 hover:shadow-gray-100/20':'shadow-gray-900/10 hover:shadow-gray-900/20'} py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" on:click={saveChat}>Save Chat</button>
           </div>
       </div>

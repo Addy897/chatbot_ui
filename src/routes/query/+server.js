@@ -1,5 +1,6 @@
-export const maxDuration = 500;
-
+export const config = {
+	maxDuration: 500, // 5 seconds
+  };
 import { AI_API } from '$env/static/private';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({request}) {

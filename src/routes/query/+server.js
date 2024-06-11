@@ -3,7 +3,7 @@ export async function POST({request}) {
     let {inputC,image_link}=await request.json()
     const data={user_input:inputC,image_url:image_link}
     const response = await fetch(
-		import.meta.env.VITE_AI_API,
+		import.meta.env.AI_API,
 		{
       
 			headers: {'Content-Type': 'application/json' },

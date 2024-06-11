@@ -12,7 +12,11 @@ export async function POST({request}) {
 			body: JSON.stringify(data),
 		}
 	);
+	try{
 	let result = await response.json(); 
     result=result.response
+	}catch{
+		let result="Error Please Upload Image to ask question."
+	}
     return new Response(result);
 }

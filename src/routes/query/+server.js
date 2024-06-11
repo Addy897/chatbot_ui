@@ -3,8 +3,9 @@ import { AI_API } from '$env/static/private';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({request}) {
     let {inputC,image_link}=await request.json()
-	console.log("Here")
+	console.log(AI_API)
     const data={user_input:inputC,image_url:image_link}
+
     const response = await fetch(AI_API,
 		{
       

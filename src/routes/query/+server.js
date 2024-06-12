@@ -16,12 +16,9 @@ export async function POST({request}) {
 		}
 	);
 	let result;
-	try{
 	result = await response.json();
     result=result.response
-	}catch{
-		result="Please Upload Image and ask question"
-	}
+	
 	
     return new Response(result);
 }

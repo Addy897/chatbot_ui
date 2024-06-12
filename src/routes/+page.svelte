@@ -6,6 +6,7 @@
   import { firebaseConfig } from '$lib/firebase_config'; // Import Firebase config
 	import { browser } from "$app/environment";
   import { doc, setDoc,getFirestore, getDoc } from "firebase/firestore"; 
+	import { Img } from "flowbite-svelte";
 
   let fApp=null
 let user=null
@@ -220,7 +221,8 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
                     </div>
                 {:else if message.image}
                     <div class="flex {message.isUser ? 'text-right justify-end' : 'text-left justify-start'}">
-                        <img src={message.image} alt="Uploaded_Image" class="max-w-xs" />
+                        <img src={encodeURI(message.image)} alt="uploaded_image" size="max-w-xs"     referrerpolicy="no-referrer"
+                        />
                     </div>
                 {/if}
             </div>

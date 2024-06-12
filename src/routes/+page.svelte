@@ -1,5 +1,5 @@
 <script>
-	import {onMount } from "svelte";
+	import {onDestroy, onMount } from "svelte";
 	import GetLink from "../lib/components/getLink.svelte";
 	import { getAuth } from "firebase/auth";
   import { getApps, initializeApp } from "firebase/app";
@@ -10,6 +10,7 @@
 
   let fApp=null
 let user=null
+let img_uuid=null
 let image_link
   let messages = [];
   let inputValue = '';
@@ -27,6 +28,7 @@ let image_link
 	const result = (await response).text()
 	return result;
 }
+
   async function sendMessage() {
       let inputC=inputValue
       if (inputValue.trim() !== '') {
@@ -53,6 +55,9 @@ let image_link
   function createNewChat() {
       selectedChat = null;
       messages = [];
+      if(user){
+      img_uuid=`${user.uid}.${makeid(5)}`
+      }
   }
 
   function selectChat(chat) {
@@ -96,23 +101,35 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
         const file = event.target.files[0];
         if (file) {
             const storage = getStorage();
-            const storageRef = ref(storage,);
-
-            uploadBytes(storageRef, file).then((snapshot) => {
-              console.log('Uploaded a blob or file!');
-              getDownloadURL(snapshot.ref).then((url)=>{
-                console.log(url)
-                image_link=url
-              })
-            });
+            const storageRef = ref(storage,img_uuid);
             const imageURL = URL.createObjectURL(file);
             messages = [...messages, { image: imageURL, isUser: true }];
+            let i=messages.length-1
+            uploadBytes(storageRef, file).then((snapshot) => {
+              getDownloadURL(snapshot.ref).then((url)=>{
+                image_link=url
+                messages[i].image=image_link
+               
+               
+              })
+            });
+            
 
         }
 
       
     }
-    
+    function makeid(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+    }
     onMount(() => {
         if(!getApps().length){
             fApp=initializeApp(firebaseConfig,{experimentalForceLongPolling: true, // this line
@@ -145,11 +162,14 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             user = JSON.parse(storedUser);
+            img_uuid=`${user.uid}.${makeid(5)}`
         }else{
           if(browser){
             window.location.href="/login"
           }
         }
+        
+        
     });
     const signOut = async () => {
         try {

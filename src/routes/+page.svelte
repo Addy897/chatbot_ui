@@ -1,12 +1,12 @@
 <script>
-	import { onDestroy, onMount } from "svelte";
+	import {onMount } from "svelte";
 	import GetLink from "../lib/components/getLink.svelte";
 	import { getAuth } from "firebase/auth";
   import { getApps, initializeApp } from "firebase/app";
   import { firebaseConfig } from '$lib/firebase_config'; // Import Firebase config
 	import { browser } from "$app/environment";
   import { doc, setDoc,getFirestore, getDoc } from "firebase/firestore"; 
-	import { Img } from "flowbite-svelte";
+  import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
   let fApp=null
 let user=null
@@ -82,7 +82,6 @@ let image_link
             useFetchStreams: false});
       const db = getFirestore(fApp);
 
-// Add a new document in collection "cities"
 setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
 
   }
@@ -96,11 +95,23 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
   function handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
+            const storage = getStorage();
+            const storageRef = ref(storage,"file.png");
+
+            uploadBytes(storageRef, file).then((snapshot) => {
+              console.log('Uploaded a blob or file!');
+              getDownloadURL(snapshot.ref).then((url)=>{
+                console.log(url)
+                image_link=url
+              })
+            });
             const imageURL = URL.createObjectURL(file);
             messages = [...messages, { image: imageURL, isUser: true }];
+
         }
+
+      
     }
-    let interval=null
     
     onMount(() => {
         if(!getApps().length){
@@ -245,14 +256,19 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
         </div>
         </div>
 
-          <div class="flex flex-row">
+          <div class="flex flex-row gap-2">
             <button
-            class="select-none rounded-lg {darkMode?'bg-white text-black shadow-gray-500/10 hover:shadow-gray-100/20':'bg-gray-900 text-white shadow-gray-900/10 hover:shadow-gray-900/20'}  py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            class="rounded-lg {darkMode?'bg-white text-black shadow-gray-500/10 hover:shadow-gray-100/20':'bg-gray-900 text-white shadow-gray-900/10 hover:shadow-gray-900/20'}  py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
             on:click={()=>{formModal=true}}
             >
-            Upload Image
-            </button>  
+            Upload Image Link
+            </button>
+            <label class="rounded-lg {darkMode?'bg-white text-black shadow-gray-500/10 hover:shadow-gray-100/20':'bg-gray-900 text-white shadow-gray-900/10 hover:shadow-gray-900/20'}  py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+						  Upload Image
+						  <input type="file" id="image" accept="image/*" class="hidden" on:change={handleFileUpload} >
+						</label>   
           <GetLink bind:imageLink={imageLink} bind:formModal={formModal} ></GetLink>
           <button class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg {darkMode?' shadow-gray-500/10 hover:shadow-gray-100/20':'shadow-gray-900/10 hover:shadow-gray-900/20'} py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md  transition-all hover:shadow-lg  focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" on:click={saveChat}>Save Chat</button>
           </div>

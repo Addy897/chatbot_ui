@@ -96,7 +96,7 @@ setDoc(doc(db, "chats", user.uid), {allChats:previousChats});
         const file = event.target.files[0];
         if (file) {
             const storage = getStorage();
-            const storageRef = ref(storage,"file.png");
+            const storageRef = ref(storage,);
 
             uploadBytes(storageRef, file).then((snapshot) => {
               console.log('Uploaded a blob or file!');

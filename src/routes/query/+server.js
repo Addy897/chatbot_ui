@@ -6,7 +6,7 @@ import { AI_API } from '$env/static/private';
 export async function POST({request}) {
     let {inputC,image_link}=await request.json()
     const data={user_input:inputC,image_url:image_link}
-
+	try{
     const response = await fetch(AI_API,
 		{
       
@@ -15,6 +15,9 @@ export async function POST({request}) {
 			body: JSON.stringify(data),
 		}
 	);
+}catch{
+	return new Response("AI Model is down. Please try again later.")
+}
 	let result;
 	result = await response.json();
     result=result.response

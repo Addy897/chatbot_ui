@@ -144,7 +144,6 @@
 					console.log(e,textChunks)
 				}
 			}
-			 // 0.03 seconds delay
     }
 		} catch (error) {
 			console.error('Error occurred:', error);
@@ -215,8 +214,8 @@
 	}
 </script>
 
-<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} w-full h-screen flex">
-	<div class="flex flex-col flex-1">
+<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} h-screen flex">
+	<div class="flex flex-col w-full">
 		{#if page == 0}
 			<!--Chat Section-->
 			{#if messages.length > 0}
@@ -227,18 +226,24 @@
 							{#if message.text}
 								
 								<div
-									class=" flex flex-row w-full items-center {message.isUser
+									class=" flex flex-row w-full items-start {message.isUser
 										? 'text-right justify-end mr-4 mt-6'
 										: 'text-left justify-start ml-4'}"
 									style="max-width: 98vw;"
 								>
+								{#if !message.isUser}
 								<img src={message.isUser?$loginStore.photoURL:robot} class="h-6 w-6 rounded-full {!message.isUser
 								? 'text-right '
 								: 'text-left '}"
 								alt=""
 								/>
-									<pre
-										class="p-3 rounded-3xl bg-[#CDE6EA] text-black text-sm text-wrap break-words overflow-hidden font-semibold font-sans">{message.text}</pre>
+								{/if}
+									<pre class="p-3 rounded-3xl bg-[#CDE6EA] text-black text-sm text-wrap break-words overflow-hidden font-semibold font-sans">{message.text}</pre>
+									{#if message.isUser}
+									<img src={message.isUser?$loginStore.photoURL:robot} class="h-6 w-6 rounded-full "
+									alt=""
+									/>
+									{/if}
 								</div>
 							{:else if message.image}
 								<div
@@ -261,14 +266,14 @@
 				<!---->
 			{:else}
 				<!--Examples-->
-				<div class="flex flex-col justify-center items-center h-full gap-5">
+				<div class="flex flex-col justify-center items-center h-full gap-5 text-center">
 					<img src={icon} alt="" class="w-48" />
 					{#if user}
 						<div class="text-[#5786B2]">
 							Welcome {user.displayName} !
 						</div>
 					{/if}
-					<div class="grid grid-cols-3 gap-2">
+					<div class="grid  gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
 						<Card
 							class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
 							on:click={() => {
@@ -343,7 +348,7 @@
 							</h5>
 						</Card>
 						<Card
-							class="flex flex-col justify-start bg-[#F5FFF2] cursor-pointer border-black w-48"
+							class=" hidden md:flex flex-col justify-start bg-[#F5FFF2] cursor-pointer border-black w-48"
 							on:click={() => {
 								inputValue = 'Pathophysiology main concepts?';
 							}}
@@ -373,7 +378,7 @@
 							</h5>
 						</Card>
 						<Card
-							class="flex w- flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
+							class=" hidden md:flex w- flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
 							on:click={() => {
 								inputValue = 'Classify diseases anatomicaly';
 							}}
@@ -443,14 +448,14 @@
 							</h5>
 						</Card>
 					</div>
-					<p class="w-3/5 text-gray-500 ml-40 font-medium">
+					<p class="text-gray-500 font-medium">
 						Disclaimer: This AI Engine for Medical Learning and Healthcare Educational Purposes Only
 					</p>
 				</div>
 				<!---->
 			{/if}
 			<!--Input-->
-			<div class="p-4 flex flex-col justify-center items-center gap-2 h-72 -mt-16">
+			<div class="flex flex-col justify-cener items-center gap-2">
 				<div class=" flex flex-row w-full justify-center">
 					<div class="flex w-full justify-center">
 						<div class="relative w-3/4">

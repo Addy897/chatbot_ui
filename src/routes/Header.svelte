@@ -384,7 +384,7 @@
 		</button>
 		<h1 class="text-2xl font-bold">AI Learning engine</h1>
 	</div>
-<div class="flex flex-row justify-center items-center gap-2 ">
+<div class="flex flex-row justify-center items-center gap-2">
 {#if $loginStore.userName}
 	<div class="flex flex-row justify-center items-center">
 	<button>

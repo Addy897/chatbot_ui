@@ -192,16 +192,16 @@
 							{#if message.text}
 								<div
 									class=" flex flex-row w-full {message.isUser
-										? 'text-right justify-end'
-										: 'text-left justify-start'}"
+										? 'text-right justify-end mr-4 mt-6'
+										: 'text-left justify-start ml-4'}"
 									style="max-width: 98vw;"
 								>
 									<pre
-										class="p-2 rounded-lg bg-gray-300 text-black text-sm text-wrap break-words overflow-hidden">{message.text}</pre>
+										class="p-3 rounded-3xl bg-[#CDE6EA] text-black text-sm text-wrap break-words overflow-hidden font-semibold font-sans">{message.text}</pre>
 								</div>
 							{:else if message.image}
 								<div
-									class="flex {message.isUser ? 'text-right justify-end' : 'text-left justify-start'}"
+									class="flex {message.isUser ? 'text-right justify-end mr-4' : 'text-left justify-start ml-4'}"
 								>
 									<img
 										src={encodeURI(message.image)}
@@ -219,15 +219,15 @@
 
 		{:else}
 			<!--Examples-->
-				<div class="flex flex-col justify-center items-center h-full gap-4">
+				<div class="flex flex-col justify-center items-center h-full gap-5">
 					<img src={icon} alt="" class="w-48"/>
 					{#if user}
 					<div class="text-[#5786B2]">
-					Welcome {user.displayName}
+					Welcome {user.displayName} !
 					</div>
 					{/if}
 					<div class="grid grid-cols-3 gap-2">
-					<Card class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer" on:click={()=>{inputValue="About Urinary Systems"}}>
+					<Card class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48" on:click={()=>{inputValue="About Urinary Systems"}}>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_238_1292)">
 						<path d="M19 5V19H5V5H19ZM19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" fill="#67AD4E"/>
@@ -240,10 +240,10 @@
 						</defs>
 						</svg>
 						
-									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white">About Urinary Systems</h5>
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">About Urinary Systems</h5>
 									
 					</Card>
-					<Card class="flex flex-col justify-start bg-[#FFF0F0] cursor-pointer" on:click={()=>{inputValue="Create notes on nursing theories"}}>
+					<Card class="flex flex-col justify-start bg-[#FFF0F0] cursor-pointer border-black w-48" on:click={()=>{inputValue="Create notes on nursing theories"}}>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_238_1293)">
 						<path d="M21 5C19.89 4.65 18.67 4.5 17.5 4.5C15.55 4.5 13.45 4.9 12 6C10.55 4.9 8.45 4.5 6.5 4.5C4.55 4.5 2.45 4.9 1 6V20.65C1 20.9 1.25 21.15 1.5 21.15C1.6 21.15 1.65 21.1 1.75 21.1C3.1 20.45 5.05 20 6.5 20C8.45 20 10.55 20.4 12 21.5C13.35 20.65 15.8 20 17.5 20C19.15 20 20.85 20.3 22.25 21.05C22.35 21.1 22.4 21.1 22.5 21.1C22.75 21.1 23 20.85 23 20.6V6C22.4 5.55 21.75 5.25 21 5ZM21 18.5C19.9 18.15 18.7 18 17.5 18C15.8 18 13.35 18.65 12 19.5V8C13.35 7.15 15.8 6.5 17.5 6.5C18.7 6.5 19.9 6.65 21 7V18.5Z" fill="#D17164"/>
@@ -259,10 +259,10 @@
 						</svg>
 						
 						
-									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white">Create notes on nursing theories</h5>
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Create notes on nursing theories</h5>
 									
 					</Card>
-					<Card class="flex flex-col justify-start bg-[#F5FFF2] cursor-pointer" on:click={()=>{inputValue="Pathophysiology main concepts?"}}>
+					<Card class="flex flex-col justify-start bg-[#F5FFF2] cursor-pointer border-black w-48" on:click={()=>{inputValue="Pathophysiology main concepts?"}}>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_238_1294)">
 						<path d="M3.84004 4H19.2V16H4.96324L3.84004 17.17V4ZM3.84004 2C2.78404 2 1.92964 2.9 1.92964 4L1.92004 22L5.76004 18H19.2C20.256 18 21.12 17.1 21.12 16V4C21.12 2.9 20.256 2 19.2 2H3.84004ZM5.76004 12H17.28V14H5.76004V12ZM5.76004 9H17.28V11H5.76004V9ZM5.76004 6H17.28V8H5.76004V6Z" fill="#D5CC2A"/>
@@ -275,16 +275,55 @@
 						</svg>
 						
 						
-									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white">Pathophysiology main concepts?</h5>
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Pathophysiology main concepts?</h5>
+									
+					</Card>
+					<Card class="flex w- flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48" on:click={()=>{inputValue="Classify diseases anatomicaly"}}>
+						<svg width="24" height="24" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+							<!-- Define the clip path to match the viewBox dimensions -->
+							<defs>
+								<clipPath id="clip-path">
+									<rect width="36" height="36" fill="none"/>
+								</clipPath>
+							</defs>
+							
+							<!-- Camera icon paths with green fill -->
+							<path clip-path="url(#clip-path)" d="M16,10.001c-4.419,0-8,3.581-8,8c0,4.418,3.581,8,8,8c4.418,0,8-3.582,8-8C24,13.583,20.418,10.001,16,10.001z M20.555,21.906c-2.156,2.516-5.943,2.807-8.459,0.65c-2.517-2.156-2.807-5.944-0.65-8.459c2.155-2.517,5.943-2.807,8.459-0.65C22.42,15.602,22.711,19.391,20.555,21.906z" fill="green"/>
+							<path clip-path="url(#clip-path)" d="M16,14.001c-2.209,0-3.999,1.791-4,3.999v0.002c0,0.275,0.224,0.5,0.5,0.5s0.5-0.225,0.5-0.5V18c0.001-1.656,1.343-2.999,3-2.999c0.276,0,0.5-0.224,0.5-0.5S16.276,14.001,16,14.001z" fill="green"/>
+							<path clip-path="url(#clip-path)" d="M29.492,9.042l-4.334-0.723l-1.373-3.434C23.326,3.74,22.232,3,21,3H11C9.768,3,8.674,3.74,8.214,4.886L6.842,8.319L2.509,9.042C1.055,9.283,0,10.527,0,12v15c0,1.654,1.346,3,3,3h26c1.654,0,3-1.346,3-3V12C32,10.527,30.945,9.283,29.492,9.042z M30,27c0,0.553-0.447,1-1,1H3c-0.553,0-1-0.447-1-1V12c0-0.489,0.354-0.906,0.836-0.986l5.444-0.907l1.791-4.478C10.224,5.25,10.591,5,11,5h10c0.408,0,0.775,0.249,0.928,0.629l1.791,4.478l5.445,0.907C29.646,11.094,30,11.511,30,12V27z" fill="green"/>
+						</svg>
+						
+						
+						
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Classify diseases anatomicaly</h5>		
+					</Card>
+					<Card class="flex flex-col justify-start bg-[#FFF0F0] cursor-pointer border-black w-48" on:click={()=>{inputValue="Generate notes on respiratory system"}}>
+						<svg height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg">
+							<path d="M8.997 6.968H6.708V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v5.923a1 1 0 0 0 .966 1l1.937.061v7.404a.549.549 0 0 0 1.053.216l3.96-9.242a1 1 0 0 0-.92-1.394zM8.708 3v1.968h.289a3 3 0 0 1 2.757 4.181l-3.96 9.243a2.549 2.549 0 0 1-4.891-1.004v-5.466A3 3 0 0 1 0 8.923V3a3 3 0 0 1 3-3h2.708a3 3 0 0 1 3 3z" fill="#D17164"/>
+						</svg>
+						
+						
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Generate notes on respiratory system</h5>
+									
+					</Card>
+					<Card class="flex flex-col justify-start bg-[#F5FFF2] cursor-pointer border-black w-48" on:click={()=>{inputValue="Simplify medical terms"}}>
+						<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+							<path d="M 5 5 L 5 27 L 27 27 L 27 5 Z M 7 7 L 25 7 L 25 25 L 7 25 Z M 11 10 L 11 22 L 13 22 L 13 17 L 19 17 L 19 22 L 21 22 L 21 10 L 19 10 L 19 15 L 13 15 L 13 10 Z" fill="#D5CC2A"/>
+						</svg>
+						
+						
+						
+									<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Simplify medical terms</h5>
 									
 					</Card>
 					
 					</div>
+					<p class="w-3/5 text-gray-500 ml-40 font-medium">Disclaimer: This AI Engine for Medical Learning and Healthcare Educational Purposes Only</p>
 				</div>
 			<!---->
 		{/if}
 			<!--Input-->
-				<div class="p-4 flex flex-col justify-center items-center gap-2">
+				<div class="p-4 flex flex-col justify-center items-center gap-2 h-72 -mt-16">
 					<div class=" flex flex-row w-full justify-center">
 						<div class="flex w-full justify-center">
 							<div class="relative w-3/4">
@@ -369,7 +408,7 @@
 								</SpeedDial>
 								<textarea
 									class="w-full pl-12 pt-3 border border-gray-300 rounded-full h-3/4 resize-none bg-[#DEEDF3] outline-none"
-									placeholder="Ask me anything.."
+									placeholder="Ask me anything..."
 									bind:value={inputValue}
 								/>
 

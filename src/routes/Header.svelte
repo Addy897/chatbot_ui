@@ -137,7 +137,7 @@
 			<div class="flex justify-between w-full items-center">
 				<h5
 					id="drawer-navigation-label-3"
-					class="text-base text-black uppercase dark:text-gray-400 font-bold"
+					class="text-black text-xl dark:text-gray-400 font-bold ml-2"
 				>
 					AI Learning engine
 				</h5>
@@ -148,20 +148,20 @@
 				/>
 			</div>
 			<div class="flex flex-col gap-2">
-				<span class="text-xs">Powered By</span>
-				<div>
+				<span class="text-xs ml-2 -mt-3 -mb-1 text-gray-500 font-medium font-sans">Powered by:</span>
+				<div class="ml-2 scale-110 mb-2 mt-1">
 					<img src={icon} alt="" class="h-8" />
 				</div>
 			</div>
 		</div>
-		<div class="w-full border-[1px] border-[#93B6CF]"></div>
+		<div class="w-64 ml-2 border-[1px] border-[#93B6CF]"></div>
 		<Sidebar>
 			<SidebarWrapper
-				divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800 flex flex-col gap-2"
+				divClass="relative overflow-y-auto py-4 px-3 rounded dark:bg-gray-800 flex flex-col w-full"
 			>
 				<SidebarGroup>
 					<div class="flex flex-row justify-between w-full">
-						<button on:click={() => (hidden2 = true)}>
+						<button class="ml-1 -mt-1" on:click={() => (hidden2 = true)}>
 							<svg
 								width="24"
 								height="24"
@@ -177,7 +177,7 @@
 								/>
 							</svg>
 						</button>
-						<button on:click={createNewChat}>
+						<button class="-mr-3 -mt-1" on:click={createNewChat}>
 							<svg
 								width="24"
 								height="24"
@@ -201,6 +201,7 @@
 				</SidebarGroup>
 				<SidebarGroup>
 					<SidebarItem
+						class="ml-0 font-medium mt-4 w-60 h-8"
 						label="Ask"
 						on:click={()=>{toggleSidebar();page=0;}}
 						href="/"
@@ -230,7 +231,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem label="Notes" {spanClass} on:click={()=>{page=1;toggleSidebar()}}>
+					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Notes" {spanClass} on:click={()=>{page=1;toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="16"
@@ -258,7 +259,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem label="Learn" {spanClass}  on:click={()=>{page=2;toggleSidebar()}}>
+					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Learn" {spanClass}  on:click={()=>{page=2;toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="12"
@@ -288,7 +289,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem label="Assessment"  on:click={()=>{page=3;toggleSidebar()}}>
+					<SidebarItem class="ml-0 mb-4 font-medium w-60 h-8" label="Assessment"  on:click={()=>{page=3;toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="16"
@@ -317,7 +318,9 @@
 					</SidebarItem>
 				</SidebarGroup>
 			</SidebarWrapper>
-			<SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800 flex flex-col gap-2 w-full">
+			<div class="w-64 ml-2 border-[1px] border-[#93B6CF] mb-2 -mt-3"></div>
+			<p class="font-semibold ml-4 text-md text-slate-700 mb-1">History</p>
+			<SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800 flex flex-col gap-1 w-full">
        
 				{#each Object.entries(previousChats) as [chat, val]}
         <SidebarGroup>
@@ -325,11 +328,11 @@
              
 							class="{darkMode ? 'bg-white text-black' : 'bg-white text-black'} {darkMode
 								? ' shadow-gray-500/10 hover:shadow-gray-100/20'
-								: 'shadow-gray-900/10 hover:shadow-gray-900/20'} w-full rounded-lg py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase shadow-md transition-all hover:shadow-lg focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none truncate flex items-center justify-between gap-2"
+								: 'shadow-gray-900/10 hover:shadow-gray-900/20'} w-60 rounded-lg py-3 px-6 text-start align-middle font-sans text-sm font-semibold shadow-md transition-all hover:shadow-md focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none truncate flex items-center justify-between gap-1 h-8"
 							><button class="inline-block w-full truncate" on:click={() => {selectChat(val);toggleSidebar();page=0}}
-								>{chat}</button
+								>{chat}...</button
 							><button
-								class="{darkMode ? 'text-red-900' : 'text-red-400'} z-20"
+								class="{darkMode ? 'text-red-900' : 'text-black'} z-20 -mr-4"
 								on:click={() => removeChat(chat)}
 								><svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -351,6 +354,17 @@
 				{/each}
       
 			</SidebarWrapper>
+			<button class="bg-[#F0FDFF] hover:shadow-md text-white font-bold py-2 px-4 rounded-lg absolute bottom-4 transform inline-flex items-center ml-2 h-12 w-64 ">
+				<div class="bg-white border-2 border-blue-800 rounded-full p-1 -ml-1">
+				  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+					<rect fill="none" height="256" width="256"/>
+					<path d="M158.7,163.5l-23.2,63.8a8,8,0,0,1-15,0L97.3,163.5a8.1,8.1,0,0,0-4.8-4.8L28.7,135.5a8,8,0,0,1,0-15L92.5,97.3a8.1,8.1,0,0,0,4.8-4.8l23.2-63.8a8,8,0,0,1,15,0l23.2,63.8a8.1,8.1,0,0,0,4.8,4.8l63.8,23.2a8,8,0,0,1,0,15l-63.8,23.2A8.1,8.1,0,0,0,158.7,163.5Z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+				  </svg>
+				</div>
+				<span class="ml-5 text-[#4B5C69] font-medium">Upgrade to Premium</span>
+			</button>
+			  
+			  
 		</Sidebar>
 </Drawer>
 <div class="p-4 flex justify-between items-center">

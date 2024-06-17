@@ -7,25 +7,34 @@ import { AI_API } from '$env/static/private';
 function build_prompt(messages){
 	messages.pop()
 	let DEFAULT_IMAGE_TOKEN = "<image>"
-	let pr=""
+	let pr="System:\nYou are a Health Education Assistant who provides information purely for educational purposes and avoids giving treatment or medical advice.\n\n"
+	let images=[]
 	for(let i=0;i<messages.length;i++){
 		if(messages[i].text){
 			pr+=`${messages[i].text}\n\n`
+		}else if(messages[i].image){
+			pr=`${DEFAULT_IMAGE_TOKEN}\n`
+			images=[]
+			images.push(messages[i].image)
+
 		}
 	}
-	return pr
+	pr+="Assistant:\n"
+	return {pr,images}
 }
 export async function POST({ request }) {
     try {
         const { messages, image_link } = await request.json();
-        let pr=build_prompt(messages)
-		let images=[]
-		if(image_link){
-			images=[image_link]
-		}
+        let {pr,images}=build_prompt(messages)
+		
         const data = {
             prompt: pr,
-			images:images
+			images:images,
+			"model":"llava-med-v1.5-mistral-7b",
+ 			"stop":"Null",
+			"temperature": 0.2,
+			"top_p": 0.7,
+			"max_new_tokens": 1024,
         };
 
         const response = await fetch(AI_API, {

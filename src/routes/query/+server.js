@@ -1,5 +1,5 @@
 export const config = {
-	maxDuration: 60, // 5 seconds
+	maxDuration: 60,
   };
 import { AI_API } from '$env/static/private';
 /** @type {import('./$types').RequestHandler} */
@@ -24,7 +24,7 @@ function build_prompt(messages){
 }
 export async function POST({ request }) {
     try {
-        const { messages, image_link } = await request.json();
+        const { messages} = await request.json();
         let {pr,images}=build_prompt(messages)
 		
         const data = {
@@ -37,7 +37,7 @@ export async function POST({ request }) {
 			"max_new_tokens": 1024,
         };
 
-        const response = await fetch(AI_API, {
+        const response = await fetch(AI_API+"/worker_generate_stream", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

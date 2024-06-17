@@ -37,7 +37,7 @@ export async function POST({ request }) {
 			"max_new_tokens": 1024,
         };
 
-        const response = await fetch(AI_API+"/worker_generate_stream", {
+        const response = await fetch(AI_API, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

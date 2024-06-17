@@ -38,19 +38,17 @@
 			});
 		}else{
             fApp=getApps()[0]
-            console.log(fApp)
         }
         
 		getAuth().onAuthStateChanged(async (currentUser) => {
 			user = currentUser;
 			if (user) {
-				
 				localStorage.setItem('user', JSON.stringify(user));
 				const db = getFirestore(fApp);
 				const docRef = doc(db, 'chats', user.uid);
 				const docSnap = await getDoc(docRef);
 				if (docSnap.exists()) {
-					previousChats = docSnap.data().allChats;
+					previousChats = docSnap.data().allChats||{};
 				}
 				loginStore.set({userName:user.displayName,photoURL:user.photoURL})
 
@@ -103,7 +101,6 @@
 	function selectChat(chat) {
 			selectedChat = chat;
 			messages = chat.messages;
-			console.log(selectedChat)
 			selectedChats.update((chats)=>{
 				return messages
 			})

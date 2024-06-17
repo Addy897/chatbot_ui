@@ -34,6 +34,7 @@
 
 	//Store
 	import { loginStore,selectedChats ,allChats} from '../stores/loginstore';
+	import { json } from '@sveltejs/kit';
 	//
 
 
@@ -59,6 +60,7 @@
 			return previousChats
 		})
 	}
+	
 	onMount(() => {
 		if (!getApps().length) {
 			fApp = initializeApp(firebaseConfig, {
@@ -77,7 +79,7 @@
 				const docRef = doc(db, 'chats', user.uid);
 				const docSnap = await getDoc(docRef);
 				if (docSnap.exists()) {
-					previousChats = docSnap.data().allChats;
+					previousChats = docSnap.data().allChats||{};
 				}
 				loginStore.set({userName:user.displayName,photoURL:user.photoURL})
 
@@ -98,30 +100,54 @@
 			}
 		}
 	});
-	async function query(inputC) {
-		const response = fetch('/query', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ inputC: inputC, image_link: image_link })
-		});
-		const result = (await response).text();
-		return result;
+	async function query(index) {
+		try {
+			const data = {
+				messages: messages,
+				image_link: image_link
+			};
+			const response = await fetch('/query', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			if (!response.ok) {
+				throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+			}
+			const reader = response.body.getReader();
+			const decoder = new TextDecoder();
+			let result = '';
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) {
+					break;
+				}
+				result = decoder.decode(value, { stream: true });
+				messages[index].text=result;
+			}
+			
+		} catch (error) {
+			console.error('Error occurred:', error);
+			return "Internal Server Error";
+		}
+
 	}
 	async function sendMessage() {
-		let inputC = inputValue;
 		if (inputValue.trim() !== '') {
 			messages = [...messages, { text: inputValue, isUser: true }];
 			inputValue = '';
-		}
-		messages = [...messages, { text: '...', isUser: false }];
+			messages = [...messages, { text: '...', isUser: false }];
+			
+			await query(messages.length-1);
+			previousChats=saveChat(previousChats)
 		
-
-		let res = await query(inputC);
-		messages.pop();
-		messages = [...messages, { text: res, isUser: false }];
+		}
+		
 	}
 	
-	function saveChat() {
+	function saveChat(previousChats) {
 		if (messages.length > 0) {
 			let title = messages[0].text;
 			let i = 0;
@@ -138,7 +164,7 @@
 		const db = getFirestore(fApp);
 
 		setDoc(doc(db, 'chats', user.uid), { allChats: previousChats });
-		
+		return previousChats
 	}
 	function handleFileUpload(event) {
 		const file = event.target.files[0];
@@ -172,9 +198,7 @@
 		messages = [...messages, { image: image_link, isUser: true }];
 		imageLink = null;
 	}
-	$:if(messages.length>0 && user){
-		saveChat()
-	}
+	
 
 </script>
 

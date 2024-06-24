@@ -1,6 +1,6 @@
 <script>
 	// Environment
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	//
 
@@ -8,7 +8,7 @@
 	import { getAuth } from 'firebase/auth';
 	import { getApps, initializeApp } from 'firebase/app';
 	import { firebaseConfig } from '$lib/firebase_config';
-	import { doc, setDoc, getFirestore, getDoc } from 'firebase/firestore';
+	import { doc, setDoc, getFirestore, getDoc, Timestamp, setIndexConfiguration, updateDoc, increment } from 'firebase/firestore';
 	import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 	//
 
@@ -27,13 +27,17 @@
 		SidebarItem,
 		SidebarWrapper,
 
-		Avatar
+		Avatar,
+
+		P
+
 
 	} from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import icon from '$lib/images/icon.png';
 	import robot from '$lib/images/robot.svg';
 	import GetLink from '$lib/components/getLink.svelte';
+	import { ThumbsUpSolid,ThumbsDownSolid } from 'flowbite-svelte-icons';
 	//
 
 	//Store
@@ -52,7 +56,9 @@
 	let imageLink = null;
 	let formModal = false;
 	let page = 0;
-
+	let liked =null
+	let uid=null
+	let duration=null
 	selectedChats.subscribe((chats) => {
 		messages = chats || [];
 	});
@@ -61,7 +67,7 @@
 			return previousChats;
 		});
 	}
-
+	
 	onMount(() => {
 		if (!getApps().length) {
 			fApp = initializeApp(firebaseConfig, {
@@ -75,9 +81,19 @@
 			user = currentUser;
 			if (user) {
 				localStorage.setItem('user', JSON.stringify(user));
+				uid=user.uid
 				const db = getFirestore(fApp);
 				const docRef = doc(db, 'chats', user.uid);
 				const docSnap = await getDoc(docRef);
+				duration= new Date().getTime()
+				if(browser){
+				window.addEventListener("beforeunload", async  () => {
+					const end = new Date().getTime();
+					duration = (end - duration) / 1000
+					await setDuration()
+				
+				});
+			}
 				if (docSnap.exists()) {
 					previousChats = docSnap.data().allChats || {};
 				}
@@ -99,6 +115,34 @@
 			}
 		}
 	});
+	function like(cont){
+
+		messages[messages.length-1].liked=cont
+		previousChats=saveChat(previousChats)
+	}
+	async function setDuration(){
+	if (!getApps().length) {
+			fApp = initializeApp(firebaseConfig, {
+				experimentalForceLongPolling: true,
+				useFetchStreams: false
+			});
+		} else {
+			fApp = getApps()[0];
+		}
+		const db = getFirestore(fApp);
+		const docRef = doc(db, 'chats', user.uid);
+		const docSnap=await getDoc(docRef)
+		let timeSpent=null
+		if(docSnap.exists()){
+			timeSpent=docSnap.data().timeSpent||{}
+		}
+		const date= new Date().toDateString()
+
+		timeSpent[date]=duration+timeSpent[date]||0
+		
+		await updateDoc(docRef, {timeSpent:timeSpent});
+		
+	}
 	async function query(index) {
 		try {
 			const data = {
@@ -152,11 +196,11 @@
 	}
 	async function sendMessage() {
 		if (inputValue.trim() !== '') {
-			messages = [...messages, { text: inputValue, isUser: true }];
+			messages = [...messages, { text: inputValue, isUser: true,timeStamp:new Date().toString()}];
 			inputValue = '';
-			messages = [...messages, { text: "...", isUser: false }];
-			
+			messages = [...messages, { text: "...", isUser: false,timeStamp:new Date().toString(),liked:liked }];
 			await query(messages.length-1);
+
 			previousChats = saveChat(previousChats);
 		}
 	}
@@ -214,13 +258,13 @@
 	}
 </script>
 
-<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} h-screen flex">
+<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} h-[90vh]  flex">
 	<div class="flex flex-col w-full">
 		{#if page == 0}
 			<!--Chat Section-->
 			{#if messages.length > 0}
 				<!--Chats-->
-				<div class="flex-1 flex flex-col overflow-y-auto p-4 gap-4">
+				<div class="flex flex-col overflow-y-auto px-4 h-full gap-4">
 					{#each messages as message}
 						<div class="mb-2">
 							{#if message.text}
@@ -237,13 +281,24 @@
 								: 'text-left '}"
 								alt=""
 								/>
+								
 								{/if}
-									<pre class="p-3 rounded-3xl bg-[#CDE6EA] text-black text-sm text-wrap break-words overflow-hidden font-semibold font-sans">{message.text}</pre>
+									<div class="flex flex-col"><pre class="p-3 rounded-3xl bg-[#CDE6EA] text-black text-sm text-wrap break-words overflow-hidden font-semibold font-sans">{message.text}</pre>
+										{#if !message.isUser && message.text!=="..." && messages.indexOf(message)===messages.length-1 && message.liked===null}
+										<div class="flex flex-row gap-5">
+											<button on:click={()=>{like(true)}}><ThumbsUpSolid color="green" class="cursor-pointer hover:scale-125"></ThumbsUpSolid></button>
+											<button on:click={()=>{like(true)}}><ThumbsDownSolid color="red" on:click={()=>{like(false)}} class="cursor-pointer hover:scale-125"></ThumbsDownSolid></button>
+										</div>
+										{/if}
+									</div>	
 									{#if message.isUser}
 									<img src={message.isUser?$loginStore.photoURL:robot} class="h-6 w-6 rounded-full "
 									alt=""
 									/>
+									
+									
 									{/if}
+								
 								</div>
 							{:else if message.image}
 								<div
@@ -266,7 +321,7 @@
 				<!---->
 			{:else}
 				<!--Examples-->
-				<div class="flex flex-col justify-center items-center h-full gap-5 text-center">
+				<div class="flex flex-col justify-center items-center gap-5 text-center">
 					<img src={icon} alt="" class="w-48" />
 					{#if user}
 						<div class="text-[#5786B2]">
@@ -455,7 +510,7 @@
 				<!---->
 			{/if}
 			<!--Input-->
-			<div class="flex flex-col justify-cener items-center gap-2">
+			<div class="flex flex-col justify-center items-center gap-2">
 				<div class=" flex flex-row w-full justify-center">
 					<div class="flex w-full justify-center">
 						<div class="relative w-3/4">

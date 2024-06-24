@@ -10,6 +10,7 @@
 	import { sineIn } from 'svelte/easing';
 	import { onMount } from 'svelte';
 	import icon from '$lib/images/icon.png';
+	import { browser } from '$app/environment';
 
 	let previousChats = {};
 	let messages = [];
@@ -52,11 +53,7 @@
 				}
 				loginStore.set({userName:user.displayName,photoURL:user.photoURL})
 
-			} else {
-				if (browser) {
-					window.location.href = '/login';
-				}
-			}
+			} 
 		});
 	
 

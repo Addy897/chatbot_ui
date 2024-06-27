@@ -156,12 +156,16 @@
 			const auth =getAuth(fApp)
             recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha', {
                 callback: async () => {
-                    const phoneNumber = `+${phone}`;
-            		const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
-					window.confirmationResult=confirmationResult
-					recaptchaVerifier.clear()
-					showOtp = true;
-					err = null;
+					try{
+						const phoneNumber = `+${phone}`;
+						const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+						window.confirmationResult=confirmationResult
+						recaptchaVerifier.clear()
+						showOtp = true;
+						err = null;
+					}catch(error){
+						err=error
+					}
                 }
             });
             recaptchaVerifier.render();

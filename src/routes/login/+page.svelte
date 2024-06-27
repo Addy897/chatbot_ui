@@ -157,7 +157,8 @@
             recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha', {
                 callback: async () => {
 					try{
-						const phoneNumber = `+${phone}`;
+						const defaultCode="91"
+						const phoneNumber = `+${defaultCode}${phone}`;
 						const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
 						window.confirmationResult=confirmationResult
 						recaptchaVerifier.clear()
@@ -167,6 +168,7 @@
 						err=error
 					}
                 }
+				
             });
             recaptchaVerifier.render();
         } catch (error) {
@@ -232,7 +234,7 @@
 				dismissable={false}
 				size="xs"
 				autoclose={false}
-				class="w-full flex flex-col items-center border-2 justify-center rounded-xl border-[#004E86] bg-[#F4FCFF] p-4 px-12 text-center"
+				class="w-full flex flex-col items-center border-2 justify-center rounded-xl border-[#004E86] bg-[#F4FCFF] px-12 text-center"
 			>
 				{#if err}
 					<Toast color="red">
@@ -250,7 +252,7 @@
 
 				<div class="border-[#93B6CF] border-[1px] w-full"></div>
 				{#if signUp && !phoneSignUp}
-					<p class="font-semibold mb-6">Create your account and get started now!</p>
+					<p class="font-semibold ">Create your account!</p>
 					<form
 						class="flex flex-col gap-2 w-full justify-center"
 						on:submit|preventDefault={handleSignup}
@@ -361,7 +363,7 @@
 							<input
 								type="text"
 								id="phone"
-								placeholder="Phone No. (use country code without + sign)"
+								placeholder="Enter Phone Number"
 								bind:value={phone}
 								class="rounded-lg text-[14px]"
 								required

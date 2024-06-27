@@ -357,7 +357,7 @@
 							<input
 								type="text"
 								id="phone"
-								placeholder="918123456789"
+								placeholder="Phone No. (use country code without + sign)"
 								bind:value={phone}
 								class="rounded-lg text-[14px]"
 								required
@@ -431,6 +431,7 @@
 							class="text-blue-600"
 							on:click={() => {
 								signUp = !signUp;
+								phoneSignUp=false
 							}}>Log In</a
 						>
 					</p>

@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import icon from '$lib/images/icon.png';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
 	let previousChats = {};
 	let messages = [];
@@ -31,6 +32,17 @@
 	allChats.subscribe((m)=>{
     	previousChats=m
 	})
+	function makeid(length) {
+		let result = '';
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		const charactersLength = characters.length;
+		let counter = 0;
+		while (counter < length) {
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
+			counter += 1;
+		}
+		return result;
+	}
 	onMount(() => {
 		if (!getApps().length) {
 			fApp = initializeApp(firebaseConfig, {
@@ -60,10 +72,6 @@
 		
 	});
 
-
-	function toggleDarkMode() {
-			darkMode = !darkMode;
-	}
 	function toggleSidebar() {
 			hidden2 = !hidden2;
 	}
@@ -73,9 +81,7 @@
 			selectedChat = null;
 			messages = [];
 			selectedChats.update((m)=>{return messages})
-			if (user) {
-				img_uuid = `${user.uid}.${makeid(5)}`;
-			}
+			
 	}
 	function saveChat() {
 			if (messages.length > 0) {
@@ -197,7 +203,7 @@
 					<SidebarItem
 						class="ml-0 font-medium mt-4 w-60 h-8"
 						label="Ask"
-						on:click={()=>{toggleSidebar();page=0;}}
+						on:click={()=>{toggleSidebar();goto("/");}}
 						href="/"
 					>
 						<svelte:fragment slot="icon">
@@ -225,7 +231,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Notes" {spanClass} on:click={()=>{page=1;toggleSidebar()}}>
+					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Notes" {spanClass} on:click={()=>{window.location.href="/notes";toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="16"
@@ -253,7 +259,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Learn" {spanClass}  on:click={()=>{page=2;toggleSidebar()}}>
+					<SidebarItem class="ml-0 font-medium w-60 h-8" label="Learn" {spanClass}  on:click={()=>{window.location.href="/learn";toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="12"
@@ -283,7 +289,7 @@
 							</svg>
 						</svelte:fragment>
 					</SidebarItem>
-					<SidebarItem class="ml-0 mb-4 font-medium w-60 h-8" label="Assessment"  on:click={()=>{page=3;toggleSidebar()}}>
+					<SidebarItem class="ml-0 mb-4 font-medium w-60 h-8" label="Assessment"  on:click={()=>{window.location.href="/assessment";toggleSidebar()}}>
 						<svelte:fragment slot="icon">
 							<svg
 								width="16"
@@ -323,7 +329,7 @@
 							class="{darkMode ? 'bg-white text-black' : 'bg-white text-black'} {darkMode
 								? ' shadow-gray-500/10 hover:shadow-gray-100/20'
 								: 'shadow-gray-900/10 hover:shadow-gray-900/20'} w-60 rounded-lg py-3 px-6 text-start align-middle font-sans text-sm font-semibold shadow-md transition-all hover:shadow-md focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none truncate flex items-center justify-between gap-1 h-8"
-							><button class="inline-block w-full truncate" on:click={() => {selectChat(val);toggleSidebar();page=0}}
+							><button class="inline-block w-full truncate" on:click={() => {selectChat(val);toggleSidebar();goto("/")}}
 								>{chat}...</button
 							><button
 								class="{darkMode ? 'text-red-900' : 'text-black'} z-20 -mr-4"

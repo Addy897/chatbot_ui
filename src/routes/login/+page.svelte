@@ -8,22 +8,37 @@
 		GoogleAuthProvider,
 		createUserWithEmailAndPassword,
 		updateProfile,
-		signInWithEmailAndPassword
+		signInWithEmailAndPassword,
+
+		RecaptchaVerifier,
+
+		signInWithPhoneNumber
+
+
 	} from 'firebase/auth';
 	import { setPersistence, browserSessionPersistence } from 'firebase/auth';
 	import { browser } from '$app/environment';
 	import { Modal, Toast } from 'flowbite-svelte';
 	import { CloseCircleSolid } from 'flowbite-svelte-icons';
 	import icon from '$lib/images/icon.png';
+	import { get } from 'svelte/store';
 
 	let name = '';
+	let phone = '';
+	let otp = '';
+	let showOtp = false;
 	let email = '';
 	let password = '';
 	let user = null;
 	let fApp = null;
-	let termsAccepted = false; // Added variable to track checkbox state
+	let termsAccepted = false; 
 	let signUp = true;
+	let phoneSignUp = false;
 	let err = null;
+	let darkMode = false;
+	let formModal = user == null;
+	let recaptchaVerifier=null;
+	let showNameBox=false;
 	const googleSignIn = async () => {
 		if (!termsAccepted) return; // Prevent sign-in if terms not accepted
 
@@ -93,15 +108,21 @@
 		}
 	};
 
+
+
 	onMount(() => {
 		if (!getApps().length) {
 			fApp = initializeApp(firebaseConfig, {
 				experimentalForceLongPolling: true,
 				useFetchStreams: false
 			});
+		}else{
+			fApp=getApps()[0]
 		}
+		const auth = getAuth(fApp);
+		
+		
 
-		const auth = getAuth();
 		auth.onAuthStateChanged((currentUser) => {
 			user = currentUser;
 			if (user) {
@@ -130,9 +151,70 @@
 			}
 		});
 	});
+	const setupRecaptchaVerifier = () => {
+        try {
+			const auth =getAuth(fApp)
+            recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha', {
+                callback: async () => {
+                    const phoneNumber = `+${phone}`;
+            		const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+					window.confirmationResult=confirmationResult
+					recaptchaVerifier.clear()
+					showOtp = true;
+					err = null;
+                }
+            });
+            recaptchaVerifier.render();
+        } catch (error) {
+            console.error('Error initializing RecaptchaVerifier:', error);
+            err = error;
+        }
+    };
 
-	let darkMode = false;
-	let formModal = user == null;
+    const handlePhoneSignIn = async () => {
+        if (!termsAccepted) return;
+		if(phone==="" && phone.length>4) return;
+        try {
+			
+			setupRecaptchaVerifier()
+        } catch (error) {
+            err = error;
+            showOtp = false; 
+        }
+    };
+	const setName=async()=>{
+		if(name==="") return;
+		const auth =getAuth(fApp);
+		try{
+			await updateProfile(auth.currentUser, {
+				displayName: name,
+				photoURL: 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'
+			})
+			showNameBox=false
+			
+			window.location.href="/"
+		}catch(error){
+				err=error
+		}
+	}
+    const handleOtpVerification = async () => {
+        try {
+			const confirmationResult =window.confirmationResult
+            const credential = await confirmationResult.confirm(otp);
+            user = credential.user;
+			console.log(user)
+			if(user.displayName!==null){
+            localStorage.setItem('user', JSON.stringify(user));
+            window.location.href = '/'; 
+			}else{
+				showNameBox=true;
+			}
+            err = null; 
+        } catch (error) {
+            err = error;
+        }
+    };
+	
 </script>
 
 <div
@@ -141,11 +223,7 @@
 		: 'text-black'} w-full h-screen flex flex-col"
 >
 	<div class="flex flex-col justify-center items-center h-full">
-		{#if user}
-			{#if browser}
-				{(window.location.href = '/')}
-			{/if}
-		{:else}
+		
 			<Modal
 				bind:open={formModal}
 				dismissable={false}
@@ -168,7 +246,7 @@
 				</div>
 
 				<div class="border-[#93B6CF] border-[1px] w-full"></div>
-				{#if signUp}
+				{#if signUp && !phoneSignUp}
 					<p class="font-semibold mb-6">Create your account and get started now!</p>
 					<form
 						class="flex flex-col gap-2 w-full justify-center"
@@ -210,7 +288,7 @@
 						>
 						<!-- Disable button if terms not accepted -->
 					</form>
-				{:else}
+				{:else if !signUp && !phoneSignUp}
 					<p class="font-semibold mb-6">SignIn to your account!</p>
 					<form
 						class="flex flex-col gap-2 w-full justify-center"
@@ -245,7 +323,92 @@
 						>
 						<!-- Disable button if terms not accepted -->
 					</form>
+				{:else}
+					{#if showNameBox}
+						<p class="font-semibold mb-6">Complete Signing In!</p>
+						<form
+							class="flex flex-col gap-2 w-full justify-center"
+							on:submit|preventDefault={setName}
+						>
+							<input
+								type="text"
+								id="phone"
+								placeholder="Enter Name"
+								bind:value={name}
+								class="rounded-lg text-[14px]"
+								required
+							/>
+							
+							
+								
+								<button
+									type="submit"
+									id="sendOtp"
+									class="w-full rounded-lg bg-[#294254] p-2 text-white text-center disabled:bg-[#111d25]"
+									>Continue</button
+								>
+							
+						</form>
+					{:else}
+					<p class="font-semibold mb-6">SignIn to your account!</p>
+						<form
+							class="flex flex-col gap-2 w-full justify-center"
+							on:submit|preventDefault={handlePhoneSignIn}
+						>
+							<input
+								type="text"
+								id="phone"
+								placeholder="918123456789"
+								bind:value={phone}
+								class="rounded-lg text-[14px]"
+								required
+							/>
+							<div id="recaptcha"></div>
+							{#if showOtp}
+								<input
+									type="text"
+									placeholder="Enter OTP"
+									bind:value={otp}
+									class="rounded-lg text-[14px]"
+									required
+								/>
+								<button
+									type="button"
+									on:click={handleOtpVerification}
+									class="w-full rounded-lg bg-[#294254] p-2 text-white text-center disabled:bg-[#111d25]"
+									disabled={!termsAccepted}
+								>
+									Verify OTP
+								</button>
+							{:else}
+								<div class="flex items-start pt-1 pb-1">
+									<input type="checkbox" id="terms" bind:checked={termsAccepted} required />
+									<label for="terms" class="ml-2 text-xs text-left"
+										>I acknowledge that this is a learning model and information provided is for
+										educational purpose only.</label
+									>
+								</div>
+								<button
+									type="submit"
+									id="sendOtp"
+									class="w-full rounded-lg bg-[#294254] p-2 text-white text-center disabled:bg-[#111d25]"
+									disabled={!termsAccepted}>Send OTP</button
+								>
+							{/if}
+						</form>
+					{/if}
 				{/if}
+				<div class="link">
+					<p class="mb-2 -mt-2 font-medium">
+						SignUp Using  <a
+							href="/login"
+							class="text-blue-600"
+							on:click={() => {
+								phoneSignUp = !phoneSignUp;
+							}}>Phone ?</a
+						>
+					</p>
+				</div>
 				<p class="font-bold -pt-2">Or</p>
 				<button
 					on:click={googleSignIn}
@@ -262,7 +425,6 @@
 					/>
 					<span>Sign with Google</span>
 				</button>
-				<!-- Disable button if terms not accepted -->
 				<div class="link">
 					<p class="mb-2 -mt-2 font-medium">
 						Already have an account? <a
@@ -274,7 +436,8 @@
 						>
 					</p>
 				</div>
+
 			</Modal>
-		{/if}
+		
 	</div>
 </div>

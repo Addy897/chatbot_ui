@@ -61,6 +61,11 @@
 	let duration=null
 	selectedChats.subscribe((chats) => {
 		messages = chats || [];
+		if(messages.length===0){
+			if (user) {
+				img_uuid = `${user.uid}.${makeid(5)}`;
+			}
+		}
 	});
 	$: if (previousChats) {
 		allChats.update((m) => {
@@ -138,7 +143,7 @@
 		}
 		const date= new Date().toDateString()
 
-		timeSpent[date]=duration+timeSpent[date]||0
+		timeSpent[date]=duration+(timeSpent[date]===null?timeSpent[date]:0)
 		
 		await updateDoc(docRef, {timeSpent:timeSpent});
 		
@@ -258,19 +263,18 @@
 	}
 </script>
 
-<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} h-[90vh]  flex">
-	<div class="flex flex-col w-full">
-		{#if page == 0}
+<div class="{darkMode ? 'bg-[#222222] text-light' : 'bg-light text-black'} flex justify-center items-center">
+	<div class="flex flex-col w-full h-[90vh]">
 			<!--Chat Section-->
 			{#if messages.length > 0}
 				<!--Chats-->
-				<div class="flex flex-col overflow-y-auto px-4 h-full gap-4">
+				<div class="flex flex-col overflow-y-auto h-full gap-4">
 					{#each messages as message}
 						<div class="mb-2">
 							{#if message.text}
 								
 								<div
-									class=" flex flex-row w-full items-start {message.isUser
+									class=" flex flex-row w-full items-center {message.isUser
 										? 'text-right justify-end mr-4 mt-6'
 										: 'text-left justify-start ml-4'}"
 									style="max-width: 98vw;"
@@ -321,7 +325,7 @@
 				<!---->
 			{:else}
 				<!--Examples-->
-				<div class="flex flex-col justify-center items-center gap-5 text-center">
+				<div class="flex flex-col h-full justify-center items-center gap-2 text-center">
 					<img src={icon} alt="" class="w-48" />
 					{#if user}
 						<div class="text-[#5786B2]">
@@ -621,10 +625,5 @@
 				<GetLink bind:imageLink bind:formModal></GetLink>
 			</div>
 			<!---->
-		{:else}
-			<div class="flex flex-col">
-				<div class="w-full flex justify-center items-center font-mono text-2xl">Coming Soon</div>
-			</div>
-		{/if}
 	</div>
 </div>

@@ -202,7 +202,6 @@
 			const confirmationResult =window.confirmationResult
             const credential = await confirmationResult.confirm(otp);
             user = credential.user;
-			console.log(user)
 			if(user.displayName!==null){
             localStorage.setItem('user', JSON.stringify(user));
             window.location.href = '/'; 

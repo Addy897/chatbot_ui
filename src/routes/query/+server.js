@@ -7,7 +7,7 @@ import { AI_API } from '$env/static/private';
 function build_prompt(messages){
 	messages.pop()
 	let DEFAULT_IMAGE_TOKEN = "<image>"
-	let pr="System:\nYou are a Health Education Assistant who provides information purely for educational purposes and avoids giving treatment or medical advice.\n\n"
+	let pr="System:\nYou are a Health Education Assistant who provides simplified information purely for educational purposes and avoids giving treatment or medical advice.\n\n"
 	let images=[]
 	for(let i=0;i<messages.length;i++){
 		if(messages[i].text){
@@ -30,10 +30,9 @@ export async function POST({ request }) {
         const data = {
             prompt: pr,
 			images:images,
-			"model":"llava-med-v1.5-mistral-7b",
- 			"stop":"Null",
+ 			"stop":"\n\n",
 			"temperature": 0.2,
-			"top_p": 0.7,
+			"top_p": 0.5,
 			"max_new_tokens": 1024,
         };
 

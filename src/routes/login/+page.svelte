@@ -21,7 +21,6 @@
 	import { Modal, Toast } from 'flowbite-svelte';
 	import { CloseCircleSolid } from 'flowbite-svelte-icons';
 	import icon from '$lib/images/icon.png';
-	import { get } from 'svelte/store';
 
 	let name = '';
 	let phone = '';
@@ -39,76 +38,6 @@
 	let formModal = user == null;
 	let recaptchaVerifier=null;
 	let showNameBox=false;
-	const googleSignIn = async () => {
-		if (!termsAccepted) return; // Prevent sign-in if terms not accepted
-
-		const provider = new GoogleAuthProvider();
-		const auth = getAuth();
-
-		setPersistence(auth, browserSessionPersistence)
-			.then(() => {
-				return signInWithPopup(auth, provider);
-			})
-			.then((result) => {
-				const credential = GoogleAuthProvider.credentialFromResult(result);
-				const token = credential.accessToken;
-				user = result.user;
-				localStorage.setItem('user', JSON.stringify(user));
-				window.location.href = '/';
-			})
-			.catch((error) => {
-				err = error;
-				const email = error.customData.email;
-				const credential = GoogleAuthProvider.credentialFromError(error);
-			})
-			.catch((error) => {
-				err = error;
-			});
-	};
-
-	const handleSignup = async () => {
-		if (!termsAccepted) return;
-
-		const auth = getAuth();
-
-		try {
-			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-			user = userCredential.user;
-			localStorage.setItem('user', JSON.stringify(user));
-			await updateProfile(auth.currentUser, {
-				displayName: name,
-				photoURL: 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'
-			})
-				.then(() => {})
-				.catch((error) => {
-					err = error;
-				});
-			window.location.href = '/';
-		} catch (error) {
-			err = error;
-		}
-	};
-	const handleSignIn = async () => {
-		if (!termsAccepted) return;
-
-		const auth = getAuth();
-
-		try {
-			await signInWithEmailAndPassword(auth, email, password)
-				.then((userCredential) => {
-					user = userCredential.user;
-					localStorage.setItem('user', JSON.stringify(user));
-					window.location.href = '/';
-				})
-				.catch((error) => {
-					err = error;
-				});
-		} catch (error) {
-			err = error;
-		}
-	};
-
-
 
 	onMount(() => {
 		if (!getApps().length) {
@@ -151,6 +80,73 @@
 			}
 		});
 	});
+	const googleSignIn = async () => {
+		if (!termsAccepted) return; // Prevent sign-in if terms not accepted
+
+		const provider = new GoogleAuthProvider();
+		const auth = getAuth();
+
+		setPersistence(auth, browserSessionPersistence)
+			.then(() => {
+				return signInWithPopup(auth, provider);
+			})
+			.then((result) => {
+				const credential = GoogleAuthProvider.credentialFromResult(result);
+				const token = credential.accessToken;
+				user = result.user;
+				localStorage.setItem('user', JSON.stringify(user));
+				window.location.href = '/';
+			})
+			.catch((error) => {
+				err = error;
+				const email = error.customData.email;
+				const credential = GoogleAuthProvider.credentialFromError(error);
+			})
+			.catch((error) => {
+				err = error;
+			});
+	};
+	const handleSignup = async () => {
+		if (!termsAccepted) return;
+
+		const auth = getAuth();
+
+		try {
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+			user = userCredential.user;
+			localStorage.setItem('user', JSON.stringify(user));
+			await updateProfile(auth.currentUser, {
+				displayName: name,
+				photoURL: 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'
+			})
+				.then(() => {})
+				.catch((error) => {
+					err = error;
+				});
+			window.location.href = '/';
+		} catch (error) {
+			err = error;
+		}
+	};
+	const handleSignIn = async () => {
+		if (!termsAccepted) return;
+
+		const auth = getAuth();
+
+		try {
+			await signInWithEmailAndPassword(auth, email, password)
+				.then((userCredential) => {
+					user = userCredential.user;
+					localStorage.setItem('user', JSON.stringify(user));
+					window.location.href = '/';
+				})
+				.catch((error) => {
+					err = error;
+				});
+		} catch (error) {
+			err = error;
+		}
+	};	
 	const setupRecaptchaVerifier = () => {
         try {
 			const auth =getAuth(fApp)
@@ -176,7 +172,6 @@
             err = error;
         }
     };
-
     const handlePhoneSignIn = async () => {
         if (!termsAccepted) return;
 		if(phone==="" && phone.length>4) return;
@@ -202,7 +197,7 @@
 		}catch(error){
 				err=error
 		}
-	}
+	};
     const handleOtpVerification = async () => {
         try {
 			const confirmationResult =window.confirmationResult
@@ -222,6 +217,7 @@
 	
 </script>
 
+
 <div
 	class="{darkMode ? 'bg-[#222222]' : 'bg-light'} {darkMode
 		? 'text-light'
@@ -234,7 +230,7 @@
 				dismissable={false}
 				size="xs"
 				autoclose={false}
-				class="w-full flex flex-col items-center border-2 justify-center rounded-xl border-[#004E86] bg-[#F4FCFF] px-12 text-center"
+				class="loginForm w-full flex flex-col items-center border-2 justify-center overflow-hidden  rounded-xl border-[#004E86] bg-[#F4FCFF] px-4 lg:px-12 text-center" 
 			>
 				{#if err}
 					<Toast color="red">

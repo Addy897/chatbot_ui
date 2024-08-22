@@ -4,10 +4,18 @@ export const config = {
 import { AI_API } from '$env/static/private';
 /** @type {import('./$types').RequestHandler} */
 
-function build_prompt(messages){
+function build_prompt(messages,model){
 	messages.pop()
 	let DEFAULT_IMAGE_TOKEN = "<image>"
-	let pr="System:\nYou are a Health Education Assistant who provides simplified information purely for educational purposes and avoids giving treatment or medical advice.\n\n"
+    let pr="System:\nYou are a Health Education Assistant who provides simplified information purely for educational purposes and avoids giving treatment or medical advice.\n\n"
+
+    if(model==="Anatomy"){
+        pr="System:\nYou are an AI specialized in human anatomy, providing accurate information on body structure and function, and suggesting relevant sources for non-anatomy questions.\n\n"
+    }else if(model==="Microbiology"){
+        pr="System:\nYou are an AI specialized in microbiology, providing accurate and detailed information on microbiological topics, and directing users to relevant sources for non-microbiology questions.\n\n"
+    }else if(model==="Pharmacology"){
+        pr="System:\nYou are an AI specialized in pharmacology, offering detailed information on drug interactions, mechanisms, uses, side effects, and pharmacokinetics, and guiding users to relevant sources for non-pharmacology questions.\n\n"
+    }
 	let images=[]
 	for(let i=0;i<messages.length;i++){
 		if(messages[i].text){
@@ -24,8 +32,8 @@ function build_prompt(messages){
 }
 export async function POST({ request }) {
     try {
-        const { messages} = await request.json();
-        let {pr,images}=build_prompt(messages)
+        const { messages,model} = await request.json();
+        let {pr,images}=build_prompt(messages,model)
 		
         const data = {
             prompt: pr,

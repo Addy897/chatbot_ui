@@ -139,7 +139,7 @@
 					id="drawer-navigation-label-3"
 					class="text-black text-xl dark:text-gray-400 font-bold ml-2"
 				>
-					AI Learning engine
+					AI Nursing Engine
 				</h5>
 				<CloseButton
 					on:click={() => {
@@ -385,7 +385,7 @@
 				/>
 			</svg>
 		</button>
-		<h1 class="text-2xl font-bold">AI Learning engine</h1>
+		<h1 class="text-2xl font-bold">AI Nursing Engine</h1>
 	</div>
 <div class="flex flex-row justify-center items-center gap-2">
 {#if $loginStore.userName}

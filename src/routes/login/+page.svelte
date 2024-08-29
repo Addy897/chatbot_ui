@@ -241,7 +241,7 @@
 						{err.message}
 					</Toast>
 				{/if}
-				<div class="text-2xl font-bold">AI Learning Engine</div>
+				<div class="text-2xl font-bold">AI Nursing Engine</div>
 				<div class="text-sm flex flex-col items-center justify-center">
 					Powered By:<img src={icon} alt="#" class="w-32" />
 				</div>

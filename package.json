@@ -28,6 +28,7 @@
 	"type": "module",
 	"dependencies": {
 		"destr": "^2.0.3",
-		"firebase": "^10.12.2"
+		"firebase": "^10.12.2",
+		"mermaid": "^11.2.0"
 	}
 }

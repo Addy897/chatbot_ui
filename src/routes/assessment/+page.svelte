@@ -81,5 +81,8 @@
 
 		<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Make Flowchart</h5>
 	</Card>
+	<p class="text-gray-500 font-medium">
+		Disclaimer: This AI Engine for Medical Learning and Healthcare Educational Purposes Only
+	</p>
 	</div>
 </div>

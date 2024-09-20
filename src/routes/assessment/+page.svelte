@@ -1,11 +1,28 @@
 <script>
 	import { goto } from '$app/navigation';	
 	import { Card} from 'flowbite-svelte';
+	import icon from '$lib/images/icon.png';
+	import { browser } from '$app/environment';
+	let user;
+	if(browser){
+	const storedUser = localStorage.getItem('user');
+		if (storedUser) {
+			user = JSON.parse(storedUser);
+		} 
+	}
 	
 </script>
 
 
-	<div class="flex flex-row w-full h-[90vh] justify-center items-center gap-2">
+	<div class="flex flex-col w-full h-[90vh] justify-center items-center gap-2">
+		<img src={icon} alt="" class="w-48" />
+		{#if user}
+			<div class="text-[#5786B2]">
+				Welcome {user.displayName} !
+			</div>
+		{/if}
+		<div class="grid  gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ">
+
 		<Card
 			class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-52"
 			on:click={() => {
@@ -64,4 +81,5 @@
 
 		<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">Make Flowchart</h5>
 	</Card>
+	</div>
 </div>

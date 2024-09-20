@@ -535,7 +535,81 @@
 								Pharmacology
 							</h5>
 						</Card>
-						
+						<Card
+							class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
+							on:click={() => {
+								model = 'BioChemistry';
+                                messages=[{isUser:false,text:"Hi there! I'm an AI specialized in BioChemistry. If you have any questions related to the BioChemistry, feel free to ask."}];
+							}}
+						>
+						<svg width="24" height="24" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+							<!-- Define the clip path to match the viewBox dimensions -->
+							<defs>
+								<clipPath id="clip-path">
+									<rect width="36" height="36" fill="none" />
+								</clipPath>
+							</defs>
+
+							<!-- Camera icon paths with green fill -->
+							<path
+								clip-path="url(#clip-path)"
+								d="M16,10.001c-4.419,0-8,3.581-8,8c0,4.418,3.581,8,8,8c4.418,0,8-3.582,8-8C24,13.583,20.418,10.001,16,10.001z M20.555,21.906c-2.156,2.516-5.943,2.807-8.459,0.65c-2.517-2.156-2.807-5.944-0.65-8.459c2.155-2.517,5.943-2.807,8.459-0.65C22.42,15.602,22.711,19.391,20.555,21.906z"
+								fill="green"
+							/>
+							<path
+								clip-path="url(#clip-path)"
+								d="M16,14.001c-2.209,0-3.999,1.791-4,3.999v0.002c0,0.275,0.224,0.5,0.5,0.5s0.5-0.225,0.5-0.5V18c0.001-1.656,1.343-2.999,3-2.999c0.276,0,0.5-0.224,0.5-0.5S16.276,14.001,16,14.001z"
+								fill="green"
+							/>
+							<path
+								clip-path="url(#clip-path)"
+								d="M29.492,9.042l-4.334-0.723l-1.373-3.434C23.326,3.74,22.232,3,21,3H11C9.768,3,8.674,3.74,8.214,4.886L6.842,8.319L2.509,9.042C1.055,9.283,0,10.527,0,12v15c0,1.654,1.346,3,3,3h26c1.654,0,3-1.346,3-3V12C32,10.527,30.945,9.283,29.492,9.042z M30,27c0,0.553-0.447,1-1,1H3c-0.553,0-1-0.447-1-1V12c0-0.489,0.354-0.906,0.836-0.986l5.444-0.907l1.791-4.478C10.224,5.25,10.591,5,11,5h10c0.408,0,0.775,0.249,0.928,0.629l1.791,4.478l5.445,0.907C29.646,11.094,30,11.511,30,12V27z"
+								fill="green"
+							/>
+						</svg>
+
+
+							<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">
+								    BioChemistry
+							</h5>
+						</Card>
+						<Card
+							class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
+							on:click={() => {
+								model = 'Physiology';
+                                messages=[{isUser:false,text:"Hi there! I'm an AI specialized in human Physiology. If you have any questions related to the Physiology, feel free to ask."}];
+							}}
+						>
+						<svg height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M8.997 6.968H6.708V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v5.923a1 1 0 0 0 .966 1l1.937.061v7.404a.549.549 0 0 0 1.053.216l3.96-9.242a1 1 0 0 0-.92-1.394zM8.708 3v1.968h.289a3 3 0 0 1 2.757 4.181l-3.96 9.243a2.549 2.549 0 0 1-4.891-1.004v-5.466A3 3 0 0 1 0 8.923V3a3 3 0 0 1 3-3h2.708a3 3 0 0 1 3 3z"
+								fill="#D17164"
+							/>
+						</svg>
+
+
+							<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">
+								Physiology
+							</h5>
+						</Card>
+						<Card
+							class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-48"
+							on:click={() => {
+								model = 'Pathology';
+                                messages=[{isUser:false,text:"Hi there! I'm an AI specialized in Pathology. If you have any questions related to the Pathology, feel free to ask."}];
+							}}
+						>
+						<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M 5 5 L 5 27 L 27 27 L 27 5 Z M 7 7 L 25 7 L 25 25 L 7 25 Z M 11 10 L 11 22 L 13 22 L 13 17 L 19 17 L 19 22 L 21 22 L 21 10 L 19 10 L 19 15 L 13 15 L 13 10 Z"
+								fill="#D5CC2A"
+							/>
+						</svg>
+
+							<h5 class="mb-2 tracking-tight text-gray-900 dark:text-white font-medium">
+								Pathology
+							</h5>
+						</Card>
 					</div>
 					<p class="text-gray-500 font-medium">
 						Disclaimer: This AI Engine for Medical Learning and Healthcare Educational Purposes Only

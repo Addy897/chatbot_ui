@@ -1,5 +1,4 @@
 <script>
-	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import mermaid from 'mermaid';
 	let mermaidCode = '';
@@ -7,8 +6,6 @@
 	let svg = '';
 	onMount(async () => {
 		mermaid.initialize({ startOnLoad: true });
-
-		
 	});
     async function genDiagram(){
         if(search==="" || search===undefined){
@@ -20,7 +17,7 @@
                 body: JSON.stringify({prompt:search})
 			});
 			const data = await response.json();
-			mermaidCode = data.mermaidCode.replace('```mermaid', '').replace('```', '');
+			mermaidCode = data.mermaidCode;
 			svg = (await mermaid.render('mermaid', mermaidCode)).svg;
 		} catch (error) {
 			console.error('Error fetching Mermaid code:', error);
@@ -28,7 +25,7 @@
     }
 </script>
 
-<div class="flex flex-col w-full justify-center items-center">
+<div class="flex flex-col w-full justify-center items-center gap-10">
 	<div class="flex flex-row w-full justify-center gap-5">
 		<div class="flex">
 			<input

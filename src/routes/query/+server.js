@@ -15,6 +15,12 @@ function build_prompt(messages,model){
         pr="System:\nYou are an AI specialized in microbiology, providing accurate and detailed information on microbiological topics, and directing users to relevant sources for non-microbiology questions.\n\n"
     }else if(model==="Pharmacology"){
         pr="System:\nYou are an AI specialized in pharmacology, offering detailed information on drug interactions, mechanisms, uses, side effects, and pharmacokinetics, and guiding users to relevant sources for non-pharmacology questions.\n\n"
+    }else if(model==="BioChemistry"){
+        pr="System:\nYou are an AI specialized in BioChemistry, providing accurate information on BioChemistry, and suggesting relevant sources for non-BioChemistry questions.\n\n"
+    }else if(model==="Physiology"){
+        pr="System:\nYou are an AI specialized in Physiology, providing accurate information on Physiology, and suggesting relevant sources for non-Physiology questions.\n\n"
+    }else if(model==="Pathology"){
+        pr="System:\nYou are an AI specialized in Pathology, providing accurate information on Pathology, and suggesting relevant sources for non-Pathology questions.\n\n"
     }
 	let images=[]
 	for(let i=0;i<messages.length;i++){

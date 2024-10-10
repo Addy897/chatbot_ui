@@ -21,7 +21,7 @@
 				Welcome {user.displayName} !
 			</div>
 		{/if}
-		<div class="grid  gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ">
+		<div class="grid  gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
 
 		<Card
 			class="flex flex-col justify-start bg-[#FEFFED] cursor-pointer border-black w-52"

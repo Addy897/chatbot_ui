@@ -5,7 +5,6 @@
     let diagnosis = '';
     let attendingPhysician = '';
     let hospital = '';
-    let pdfUrl;
     let report_html;
     let iframeSrc;
 

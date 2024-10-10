@@ -29,6 +29,7 @@
 	"dependencies": {
 		"destr": "^2.0.3",
 		"firebase": "^10.12.2",
+		"googleapis": "^144.0.0",
 		"html2pdf.js": "^0.10.2",
 		"mermaid": "^11.2.0"
 	}
